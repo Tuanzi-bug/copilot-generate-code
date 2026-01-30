@@ -37,25 +37,32 @@ Perform systematic, comprehensive code review that prevents production issues th
 
 ## Context Loading Strategy
 
-Follow **Effective Context Engineering** principles (Just-in-Time Context):
+**Use the `context-loader` skill for intelligent context loading:**
 
 ```
-1. Load lightweight index: context/README.md (~500 tokens)
-2. Load relevant domain knowledge (按需):
-   - context/tech/security-standards.md (安全审查时)
-   - context/tech/architecture.md (架构审查时)
-   - context/experience/code-review-checklist.md (审查模式)
-   - context/experience/lessons-learned.md (已知问题库)
-3. Load current requirements (按需):
-   - requirements/INDEX.md (需求索引)
-   - requirements/in-progress/当前需求.md (if related)
-4. Load detailed context only when needed:
-   - context/tech/tech-stack.md (技术栈依赖)
-   - context/design/patterns.md (设计模式参考)
-   - context/business/compliance.md (合规要求)
+@context-loader
 ```
 
-**Key Principle**: Start with index, load details incrementally based on findings.
+This skill automatically implements the index-first strategy for code review:
+
+1. ✅ Loads `context/README.md` (~500 tokens) - lightweight index
+2. ✅ Selectively loads review-relevant knowledge:
+   - `context/tech/architecture.md` (架构审查时)
+   - `context/experience/workflow-improvements.md` (审查最佳实践)
+   - `context/experience/error-patterns.md` (已知问题库)
+3. ✅ Loads current requirements as needed:
+   - `requirements/INDEX.md` (需求索引)
+   - `requirements/in-progress/当前需求.md` (if related)
+4. ✅ Loads security/compliance context when needed:
+   - `context/tech/security-standards.md` (安全标准)
+   - `context/business/compliance.md` (合规要求)
+
+**Key Benefits**: 
+- 80-85% reduction in context token usage
+- Only loads relevant knowledge for the specific review type
+- Prevents context pollution while maintaining quality
+
+See [context-loader skill](../.github/skills/context-loader/SKILL.md) for details.
 
 ## Workflow
 

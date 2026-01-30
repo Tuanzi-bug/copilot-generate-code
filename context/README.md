@@ -41,7 +41,32 @@
 
 ## 快速开始
 
+### 使用 Context Loader Skill
+
+**推荐方式** - 在所有工作阶段开始时使用：
+
+```bash
+@context-loader
+```
+
+这个技能会自动：
+- ✅ 加载轻量级索引文件（~500 tokens）
+- ✅ 根据任务类型选择性加载相关领域
+- ✅ 防止上下文污染，节省 80-85% tokens
+- ✅ 确保加载的内容高度相关
+
+**集成到工作流**：
+- `/plan` - 自动加载架构决策和需求
+- `/tdd` - 自动加载测试策略和模式
+- `/e2e` - 自动加载 E2E 测试知识
+- `/build-fix` - 自动加载构建系统和错误模式
+- `/review` - 自动加载审查最佳实践
+- `/learn` - 自动加载相关领域知识
+
+详见 [context-loader skill](../.github/skills/context-loader/SKILL.md)
+
 ### 添加新知识
+
 使用 `/learn` 命令记录学习成果：
 ```
 /learn [你的发现/模式/解决方案]

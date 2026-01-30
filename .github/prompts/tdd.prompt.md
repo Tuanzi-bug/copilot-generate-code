@@ -35,20 +35,28 @@ Guide test-driven development through systematic phases: write failing tests (Re
 
 ## Context Loading Strategy
 
-Follow **Effective Context Engineering** principles (Just-in-Time Context):
+**Use the `context-loader` skill for efficient context loading:**
 
 ```
-1. Load lightweight index: context/README.md (500 tokens)
-2. Load relevant domain knowledge (按需):
-   - context/tech/testing-strategy.md (测试策略)
-   - context/experience/test-patterns.md (测试模式)
-3. Load current requirements (按需):
-   - requirements/INDEX.md (需求索引)
-   - requirements/in-progress/当前需求.md
-4. Load detailed context only when needed:
-   - context/design/architecture.md (架构变更时)
-   - context/business/domain-model.md (业务逻辑时)
+@context-loader
 ```
+
+This skill automatically implements the index-first strategy:
+
+1. ✅ Loads `context/README.md` (500 tokens) - lightweight index
+2. ✅ Selectively loads testing domain knowledge:
+   - `context/tech/testing-strategy.md` (测试策略)
+   - `context/experience/test-patterns.md` (测试模式)
+3. ✅ Loads current requirements as needed:
+   - `requirements/INDEX.md` (需求索引)
+   - `requirements/in-progress/当前需求.md`
+4. ✅ Loads detailed context only when needed:
+   - `context/tech/architecture.md` (架构变更时)
+   - `context/business/domain-model.md` (业务逻辑时)
+
+**Efficiency**: Reduces context load by 80-85% compared to loading all files.
+
+See [context-loader skill](../.github/skills/context-loader/SKILL.md) for details.
 
 ## Workflow
 

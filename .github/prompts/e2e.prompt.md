@@ -37,15 +37,21 @@ Validate end-to-end user workflows and system integrations through realistic tes
 
 ## Context Loading Strategy
 
-Follow **Effective Context Engineering** principles (Just-in-Time Context):
+**Use the `context-loader` skill for efficient context loading:**
 
 ```
-1. Load lightweight index: context/README.md (500 tokens)
-2. Load relevant domain knowledge (按需):
+@context-loader
+```
+
+This skill implements the index-first approach optimized for E2E testing:
+
+```
+1. ✅ Loads `context/README.md` (500 tokens) - lightweight index
+2. ✅ Selectively loads E2E-relevant knowledge:
    - context/tech/testing-strategy.md (E2E测试策略)
-   - context/design/architecture.md (系统架构)
+   - context/tech/architecture.md (系统架构)
    - context/api/endpoints.md (API集成点)
-3. Load current requirements (按需):
+3. ✅ Loads current requirements as needed:
    - requirements/INDEX.md (需求索引)
    - requirements/in-progress/当前需求.md
 4. Load detailed context only when needed:

@@ -36,17 +36,23 @@ Detect, analyze, and repair build errors efficiently by loading relevant error p
 
 ## Context Loading Strategy
 
-Follow **Effective Context Engineering** principles (Just-in-Time Context):
+**Use the `context-loader` skill for intelligent error context loading:**
 
 ```
-1. Load lightweight index: context/README.md (500 tokens)
-2. Load relevant domain knowledge (按需):
+@context-loader
+```
+
+This skill implements the index-first approach optimized for build errors:
+
+```
+1. ✅ Loads `context/README.md` (500 tokens) - lightweight index
+2. ✅ Searches and loads error-relevant knowledge:
    - context/tech/build-system.md (构建系统配置)
    - context/experience/error-patterns.md (已知错误模式库)
-3. Load current requirements (按需):
+3. ✅ Loads current requirements as needed:
    - requirements/INDEX.md (需求索引)
    - requirements/in-progress/当前需求.md
-4. Load detailed context only when needed:
+4. ✅ Loads detailed context only when needed:
    - context/tech/tech-stack.md (技术栈依赖)
    - context/experience/lessons-learned.md (历史修复经验)
 ```

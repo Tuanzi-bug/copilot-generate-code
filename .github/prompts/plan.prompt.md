@@ -36,6 +36,29 @@ Transform user ideas into actionable, well-documented requirements through syste
 - ❌ Detailed UI design mockups (outputs research artifacts only)
 - ❌ Actual test execution (defines test cases only)
 
+## Context Loading Strategy
+
+**Use the `context-loader` skill for efficient context loading:**
+
+```
+@context-loader
+```
+
+This skill implements the index-first strategy:
+- Loads `context/README.md` and `requirement/INDEX.md` first
+- Selectively loads architecture and design patterns based on planning needs
+- Prevents context pollution by loading only relevant domain files
+- Typical load: 3-5 files, ~2,500-4,000 tokens (vs 15+ files, 18,000+ tokens)
+
+**For planning tasks, typically loads:**
+- Architecture decisions and design patterns
+- Existing requirements and dependencies
+- Technical constraints and framework knowledge
+
+See [context-loader skill](../.github/skills/context-loader/SKILL.md) for details.
+
+---
+
 ## Workflow
 
 Use the **todo list** to track progress through all planning stages.
@@ -43,6 +66,11 @@ Use the **todo list** to track progress through all planning stages.
 ### Phase 1: Discovery & Context Analysis
 
 **Objective**: Understand what the user wants to build and why.
+
+**First, load context efficiently:**
+```
+@context-loader
+```
 
 1. **Gather User Input**
    - Extract feature description from user request
