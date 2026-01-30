@@ -15,7 +15,7 @@
 | [错误模式](error-patterns.md) | 常见错误及解决方案 | 待添加 |
 | [测试模式](test-patterns.md) | 有效的测试实践模式 | 待添加 |
 | [调试策略](debugging-tactics.md) | 调试技巧和策略 | 待添加 |
-| [工作流改进](workflow-improvements.md) | 流程优化和效率提升 | 待添加 |
+| [工作流改进](workflow-improvements.md) | 流程优化和效率提升 | 1 个模式 ✅ |
 
 ## 快速参考
 
