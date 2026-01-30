@@ -44,8 +44,25 @@ Systematically capture lessons learned, bug patterns, workflow improvements, and
 
 ### Prerequisites
 - **Workspace exists**: ${workspaceFolder}
-- **User provides learning**: Pattern, bug fix, workflow improvement, or insight
-- **Session context available**: Recent work that triggered the learning
+- **User provides input**: 
+  - Learning (pattern, bug fix, workflow improvement, insight) OR
+  - Request to bootstrap context structure for existing project
+
+### Operational Modes
+
+This prompt operates in **two modes** based on project state:
+
+**Mode 1: Bootstrap Mode** (Auto-detected)
+- **Trigger**: context/ or requirements/ directories don't exist
+- **Action**: Initialize knowledge structure from existing project
+- **Output**: Complete context/ and requirements/ structure with initial knowledge
+
+**Mode 2: Learning Synthesis Mode** (Default)
+- **Trigger**: Knowledge structure exists
+- **Action**: Capture and synthesize new learnings
+- **Output**: Incremental updates to existing knowledge base
+
+The prompt **automatically detects** which mode to use and informs the user.
 
 ### Directory Structure (Auto-created)
 
@@ -71,7 +88,377 @@ ${workspaceFolder}/
     ├── in-progress/                 # Active requirements
     └── completed/                   # Finalized requirements
 ```
+stages.
 
+
+**Bootstrap Mode**:
+1. ✅ Automatic detection of missing knowledge structure
+2. ✅ Project analysis and tech stack detection
+3. ✅ Knowledge base initialization with discovered patterns
+4. ✅ Directory and file structure creation
+5. ✅ Initial domain file generation with project-specific content
+
+**Learning Synthesis Mode**:
+1. ✅ Intelligent context loading (index-first strategy)
+2. ✅ Learning analysis and categorization
+3. ✅ Domain knowledge synthesis
+4. ✅ Skill creation for complex workflows
+5. ✅ Incremental document updates (no pollution)
+6. ✅ Cross-referencing and deduplication
+7. ✅ Quality validation before storage
+
+### What This Does NOT Cover
+- ❌ Code implementation (use Work stage)
+- ❌ Architecture design (use Plan stage)
+- ❌ Code review (use Review stage)
+- ❌ Initial project scaffolding (this bootstraps knowledge, not cod
+fi
+```
+
+**2. If BOOTSTRAP MODE Required**:
+
+Inform user:
+```
+🔍 Detected: This project lacks context/requirements structure.
+
+I can bootstrap a complete knowledge base by:
+1. Analyzing your existing codebase
+2. Creating organized context/ and requirements/ directories
+3. Extracting initial domain knowledge
+4. Setting up index files for future learning
+
+Would you like me to:
+[A] Bootstrap full knowledge structure (recommended for existing projects)
+[B] Create minimal structure only (just directories and READMEs)
+[C] Skip bootstrap and proceed with learning synthesis
+
+Please choose A, B, or C.
+```
+
+**STOP and wait for user choice.**
+
+**3. Execute Bootstrap (if user chooses A or B)**
+
+#### Option A: Full Bootstrap
+
+**Step 1: Analyze Existing Project**
+
+```bash
+# Gather project context
+- Read package.json / requirements.txt / go.mod (identify tech stack)
+- Scan directory structure (understand organization)
+- Check for existing docs (README, CONTRIBUTING, etc.)
+- Identify test frameworks (Jest, pytest, Go test, etc.)
+- Find build systems (webpack, vite, make, etc.)
+```
+
+**Step 2: Create Directory Structure**
+
+```bash
+mkdir -p context/tech
+mkdir -p context/experience
+mkdir -p requirements/in-progress
+mkdir -p requirements/completed
+```
+
+**Step 3: Generate Initial Context Files**
+
+Create `context/README.md`:
+````markdown
+# Project Knowledge Base
+
+**Project**: ${workspaceFolder}  
+**Initialized**: {Date}  
+**Last Updated**: {Date}
+
+## Overview
+
+This knowledge base captures technical patterns, common issues, and project-specific experience to help team members work effectively.
+
+## Structure
+
+### Technical Knowledge (`tech/`)
+System architecture, testing strategies, build configurations, and framework-specific patterns.
+
+- [Testing Strategy](tech/testing-strategy.md) - TDD/E2E patterns
+- [Build System](tech/build-system.md) - Build configurations and optimizations
+- [Architecture](tech/architecture.md) - System design decisions
+- [Frameworks](tech/frameworks.md) - Framework-specific knowledge
+
+### Experience Knowledge (`experience/`)
+Common errors, debugging tactics, workflow improvements, and hard-won lessons.
+
+- [Error Patterns](experience/error-patterns.md) - Common errors and solutions
+- [Test Patterns](experience/test-patterns.md) - Effective testing patterns
+- [Debugging Tactics](experience/debugging-tactics.md) - Debugging strategies
+- [Workflow Improvements](experience/workflow-improvements.md) - Process optimizations
+
+## Quick Start
+
+### Adding New Knowledge
+Use `/learn` command to capture learnings:
+```
+/learn [your learning/pattern/solution]
+```
+
+### Finding Knowledge
+1. Check this README for topic overview
+2. Navigate to relevant domain file
+3. Use search for specific patterns
+
+## Statistics
+
+- **Total Domain Files**: {count}
+- **Technical Domains**: {count}
+- **Experience Domains**: {count}
+- **Last Learning Added**: {date}
+
+---
+
+**Maintenance**: Update this file when adding new domain areas or major changes.
+````
+
+Create `context/tech/README.md`:
+````markdown
+# Technical Knowledge
+
+Framework configurations, architectural patterns, testing strategies, and build system knowledge.
+
+## Domains
+
+| Domain | Description | Key Patterns |
+|--------|-------------|--------------|
+| [Testing Strategy](testing-strategy.md) | TDD/E2E patterns, test organization | {summary from analysis} |
+| [Build System](build-system.md) | Build configs, optimization | {summary from analysis} |
+| [Architecture](architecture.md) | System design, patterns | {summary from analysis} |
+| [Frameworks](frameworks.md) | Framework-specific knowledge | {detected: framework names} |
+
+## Quick Reference
+
+{Generate based on project analysis}
+
+---
+**Last Updated**: {Date}
+````
+
+Create `context/experience/README.md`:
+````markdown
+# Experience Knowledge
+
+Lessons learned, common errors, debugging tactics, and workflow improvements discovered during development.
+
+## Domains
+
+| Domain | Description | Patterns |
+|--------|-------------|----------|
+| [Error Patterns](error-patterns.md) | Common errors and solutions | {count} patterns |
+| [Test Patterns](test-patterns.md) | Effective testing patterns | {count} patterns |
+| [Debugging Tactics](debugging-tactics.md) | Debugging strategies | {count} tactics |
+| [Workflow Improvements](workflow-improvements.md) | Process optimizations | {count} improvements |
+
+## Getting Started
+
+Start with empty domains. As you encounter issues and discover solutions, use `/learn` to capture them.
+
+---
+**Last Updated**: {Date}
+````
+
+**Step 4: Create Initial Domain Files** (based on project analysis)
+
+For each domain, create initial file with discovered patterns:
+
+Example `context/tech/testing-strategy.md`:
+````markdown
+# Testing Strategy
+
+**Last Updated**: {Date}
+
+## Overview
+
+Testing approach for this project based on {detected test framework}.
+
+## Current Setup
+
+**Test Framework**: {detected: Jest/pytest/etc.}  
+**Test Organization**: {analyzed from project structure}  
+**Coverage Tool**: {detected if present}
+
+## Test Patterns
+
+{If tests exist, extract 1-2 initial patterns}
+
+### Pattern: {Discovered Pattern Name}
+
+**Context**: {When this is used in the codebase}
+**Implementation**: 
+```code
+{Example from actual codebase}
+```
+**Benefits**: {Why this works}
+
+## Getting Started
+
+This file will grow as you:
+- Discover effective test patterns
+- Encounter testing challenges
+- Learn testing best practices
+
+Use `/learn` to add new testing knowledge.
+
+---
+**Change Log**:
+| Date | Change | Author |
+|------|--------|--------|
+| {Date} | Initial bootstrap from project analysis | System |
+````
+
+**Step 5: Generate Requirements Index**
+
+Create `requirements/INDEX.md`:
+````markdown
+# Requirements Index
+
+**Project**: ${workspaceFolder}  
+**Last Updated**: {Date}
+
+## Overview
+
+This index tracks all requirements for the project. Use `/plan` to create new requirements.
+
+## In Progress
+
+{If GitHub issues exist, suggest importing them}
+
+Currently tracking requirements in progress.
+
+| Req ID | Title | Priority | Created | Owner | Status |
+|--------|-------|----------|---------|-------|--------|
+| - | - | - | - | - | - |
+
+## Completed
+
+Requirements that have been finalized and implemented.
+
+| Req ID | Title | Priority | Completed | Owner | GitHub Issue |
+|--------|-------|----------|-----------|-------|--------------|
+| - | - | - | - | - | - |
+
+## Statistics
+
+- **Total Requirements**: 0
+- **In Progress**: 0
+- **Completed**: 0
+
+## Getting Started
+
+To create your first requirement, use:
+```
+/plan [describe your feature or project]
+```
+
+This will create a structured requirement document following professional software engineering practices.
+
+## Integration
+
+- **Planning**: Use `/plan` to create requirements
+- **Learning**: Use `/learn` to capture implementation insights
+- **Review**: Link code reviews back to requirements
+
+---
+
+**Next Steps**: 
+1. Use `/plan` to document your first requirement
+2. Link GitHub issues to requirement documents
+3. Use `/learn` to capture implementation learnings
+````
+
+**Step 6: Generate Bootstrap Summary**
+
+````markdown
+## ✅ Knowledge Base Bootstrapped
+
+### Created Structure
+
+```
+context/
+├── README.md (✓ Created)
+├── tech/
+│   ├── README.md (✓ Created)
+│   ├── testing-strategy.md (✓ Created with {n} initial patterns)
+│   ├── build-system.md (✓ Created)
+│   ├── architecture.md (✓ Created)
+│   └── frameworks.md (✓ Created - {detected frameworks})
+└── experience/
+    ├── README.md (✓ Created)
+    ├── error-patterns.md (✓ Created - ready for learnings)
+    ├── test-patterns.md (✓ Created - ready for learnings)
+    ├── debugging-tactics.md (✓ Created - ready for learnings)
+    └── workflow-improvements.md (✓ Created - ready for learnings)
+
+requirements/
+├── INDEX.md (✓ Created)
+├── in-progress/ (✓ Created)
+└── completed/ (✓ Created)
+```
+
+### Discovered & Documented
+
+- **Tech Stack**: {list detected technologies}
+- **Test Framework**: {detected framework}
+- **Build System**: {detected build tool}
+- **Initial Patterns**: {count} patterns extracted from codebase
+
+### Recommended Next Steps
+
+1. **Review Initial Knowledge**: 
+   - Check `context/tech/testing-strategy.md` for accuracy
+   - Verify detected frameworks in `context/tech/frameworks.md`
+
+2. **Add Your First Learning**:
+   ```
+   /learn [describe a pattern or issue you've encountered]
+   ```
+
+3. **Document Requirements**:
+   ```
+   /plan [describe a feature or project goal]
+   ```
+
+4. **Import Existing Issues** (if applicable):
+   - Review GitHub issues
+   - Convert to formal requirements using `/plan`
+
+### Your Knowledge Base is Ready! 🎉
+
+The structure is in place. Now use:
+- `/learn` - Capture new patterns and solutions
+- `/plan` - Document requirements
+- Context files - Reference during development
+````
+
+#### Option B: Minimal Bootstrap
+
+Create only directory structure and basic README files without analysis:
+
+```bash
+mkdir -p context/tech context/experience
+mkdir -p requirements/in-progress requirements/completed
+
+# Create minimal README files with templates
+# Create empty domain files
+```
+
+**4. After Bootstrap Complete**
+
+Set mode to `LEARNING_SYNTHESIS` and inform user:
+
+```
+Knowledge base initialized! You can now:
+- Add learnings: /learn [pattern/solution]
+- Create requirements: /plan [feature description]
+- Browse knowledge: context/README.md
+```
 ### What This Workflow Covers
 1. ✅ Intelligent context loading (index-first strategy)
 2. ✅ Learning analysis and categorization
@@ -268,7 +655,63 @@ Use the **todo list** to track progress through all learning stages.
    
    ## Related Resources
    
-   - [Related domain file 1](./other-domain.md)
+   - [Relate0: Bootstrap Existing Project (New Scenario)
+
+**User Input**: 
+```
+/learn
+```
+
+**System Detection**:
+```
+🔍 Checking project structure...
+❌ context/ directory not found
+❌ requirements/ directory not found
+
+MODE: BOOTSTRAP
+```
+
+**User Interaction**:
+```
+System: "This project lacks knowledge structure. Bootstrap now?"
+User: "A" (full bootstrap)
+```
+
+**Actions Taken**:
+1. ✅ Analyzed project structure
+2. ✅ Detected: Node.js + TypeScript + Jest + Vite
+3. ✅ Created context/ with 8 domain files
+4. ✅ Extracted 3 initial testing patterns from existing tests
+5. ✅ Created requirements/INDEX.md
+6. ✅ Generated bootstrap summary
+
+**Files Created**:
+- context/README.md
+- context/tech/README.md (with 4 domains)
+- context/tech/testing-strategy.md (with 3 discovered patterns)
+- context/tech/build-system.md (Vite configuration patterns)
+- context/tech/frameworks.md (React + TypeScript patterns)
+- context/experience/README.md (with 4 domains)
+- context/experience/error-patterns.md (ready for learnings)
+- requirements/INDEX.md
+
+**Output**:
+```
+✅ Knowledge base bootstrapped!
+
+Discovered:
+- Tech Stack: Node.js, TypeScript, React
+- Test Framework: Jest with React Testing Library
+- Build System: Vite
+- Initial Patterns: 3 testing patterns extracted
+
+Next steps:
+- Review context/tech/testing-strategy.md
+- Use /learn to add new patterns
+- Use /plan to document requirements
+```
+
+### Example d domain file 1](./other-domain.md)
    - [Relevant skill](../../.github/skills/skill-name/SKILL.md)
    - [External documentation](https://example.com)
    
