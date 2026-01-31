@@ -1,6 +1,6 @@
 # 工作流改进
 
-**Last Updated**: {日期}
+**Last Updated**: 2026-01-31
 
 ## 概述
 
@@ -103,6 +103,92 @@
 
 ---
 
+## 协作方式
+
+### 要求确认而非虚构信息的规划原则
+
+**类别**: 协作方式/AI 交互模式
+**问题**: `/plan` 命令在缺少具体信息时会编造细节（如虚构 Copilot hook 配置），导致：
+- 规划文档包含错误信息
+- 用户信任度下降
+- 后续实施困难（基于错误假设）
+
+**改进方案**:
+创建全局 `never-fabricate.instructions.md` 文件，使所有 AI 交互（不仅是 `/plan`）都遵循"永不编造信息"原则。
+
+**实施步骤**:
+1. ✅ 创建 `.github/instructions/never-fabricate.instructions.md`
+2. ✅ 定义核心原则：质量优于完整性
+3. ✅ 提供详细的"何时停止并询问"指南
+4. ✅ 包含请求澄清的模板和示例
+5. ✅ 简化 plan.prompt.md，移除重复内容，引用全局 instructions
+6. ✅ 使原则适用于所有工作流阶段（Plan/Work/Review/Compound）
+
+**架构决策**:
+- **为什么用 instructions 而非 prompt**: 
+  - Instructions 应用于所有聊天会话（全局生效）
+  - Prompt 仅在特定命令时生效（局部生效）
+  - 不编造信息是普适原则，应该全局强制执行
+- **职责分离**: 
+  - Instructions = 全局行为准则
+  - Prompts = 特定工作流程
+
+**效果**:
+- 📈 改进前: 仅 `/plan` 有防护，其他命令可能编造信息
+- 📈 改进后: 所有 AI 交互都遵循"永不编造"原则
+- 💡 额外收益: 
+  - 跨工作流的一致性（Plan/Work/Review 都适用）
+  - 代码更简洁（prompts 不重复此逻辑）
+  - 更容易维护（一处修改，全局生效）
+  - 新 prompts 自动继承此原则
+
+**成本**: 
+- 初始投入：创建 instructions 文件（一次性，约 45 分钟）
+- 维护成本：极低（全局原则，很少需要修改）
+- 交互成本：可能需要额外的澄清往返，但换来准确性
+
+**推荐程度**: ⭐⭐⭐⭐⭐ (5星 - 关键架构改进)
+
+**核心原则**:
+```
+质量优于完整性 - 宁可输出不完整但准确，
+也不要完整但充满虚构信息
+
+Engineering Integrity - Be honest about what you know and don't know
+```
+
+**使用场景对比**:
+
+| 场景 | 改进前 | 改进后 |
+|------|--------|--------|
+| `/plan` 规划功能 | 可能编造 hook 配置 | 停止并请求具体配置 |
+| `/work` 编写代码 | 可能编造 API 规范 | 停止并请求 API 文档 |
+| `/review` 代码审查 | 可能编造安全标准 | 停止并请求合规要求 |
+| 文档编写 | 可能编造使用示例 | 停止并请求真实代码 |
+| 所有聊天 | 不一致的行为 | 统一的诚信标准 |
+
+**文件结构**:
+```
+.github/
+├── instructions/
+│   └── never-fabricate.instructions.md  ← 新增：全局生效
+└── prompts/
+    └── plan.prompt.md                    ← 简化：引用全局原则
+```
+
+**相关资源**:
+- [never-fabricate.instructions.md](../../../.github/instructions/never-fabricate.instructions.md) - 全局原则定义
+- [plan.prompt.md](../../../.github/prompts/plan.prompt.md) - 简化后的规划 prompt
+- [AI Safety Best Practices](../../../.github/instructions/ai-prompt-engineering-safety-best-practices.instructions.md)
+
+**延伸思考**:
+这个改进体现了软件工程的 DRY 原则（Don't Repeat Yourself）：
+- 全局原则 → Instructions（单一真实来源）
+- 特定工作流 → Prompts（引用全局原则）
+- 避免在每个 prompt 中重复相同的行为准则
+
+---
+
 ## 工具优化
 
 待添加工具使用优化经验...
@@ -124,4 +210,7 @@
 **变更日志**:
 | 日期 | 变更 | 作者 |
 |------|------|------|
+| 2026-01-31 | 升级为全局 instructions：never-fabricate.instructions.md | System |
+| 2026-01-31 | 添加"要求确认而非虚构信息的规划原则"改进 | System |
+| 2026-01-30 | 添加索引优先上下文加载策略 | System |
 | 2026-01-30 | 初始创建 | System |

@@ -14,6 +14,8 @@ Execute a comprehensive planning workflow following industry-standard best pract
 
 Transform user ideas into actionable, well-documented requirements through systematic analysis. Generate structured requirement documents following professional software engineering standards, ensuring all aspects (product, architecture, UX, testing) are properly planned and tracked.
 
+**CRITICAL**: Follow the [never-fabricate principle](../.github/instructions/never-fabricate.instructions.md) - stop and request clarification when uncertain rather than inventing details.
+
 ## Scope & Preconditions
 
 ### Prerequisites
@@ -89,6 +91,8 @@ Use the **todo list** to track progress through all planning stages.
    - **What's the desired outcome?** (Success criteria, metrics)
    - **What are the constraints?** (Technical, business, timeline)
    - **What's out of scope?** (Explicitly excluded features)
+   
+   *Note: Apply never-fabricate principle throughout - request clarification for any gaps.*
 
 4. **Document Initial Context**
    - Summarize user need in one sentence
@@ -523,10 +527,11 @@ ${workspaceFolder}/requirements/
 - ❌ Technical feasibility is questionable (STOP and escalate)
 - ❌ Critical dependencies are blocked (STOP and document blockers)
 - ❌ Requirements conflict with existing system (STOP and resolve conflicts)
+- ❌ **Missing critical information** (STOP and request clarification - NEVER fabricate)
+- ❌ **Uncertain about technical details** (STOP and ask for specifics - NEVER invent)
 
 ## Quality Assurance
-
-### Validation Steps
+Missing critical information (apply never-fabricate principle
 
 After completing the workflow:
 
@@ -566,10 +571,11 @@ After completing the workflow:
 | Unclear user needs | Insufficient discovery | Return to Phase 1 and ask clarifying questions |
 | Architecture complexity | Feature is too large | Break into multiple smaller requirements |
 | Missing agent access | Agent not available | Use inline analysis following agent principles |
+| **Uncertain about technical details** | **Information gap** | **STOP workflow, ask specific questions, never fabricate** |
+| **Missing implementation specifics** | **Insufficient context** | **Request examples, documentation, or codebase references** |
 
 ## Integration with Other Stages
-
-This planning workflow connects to other stages:
+Uncertain details | Information gap | Apply never-fabricate principle: stop and request clarification
 
 ### To Work Stage (TDD Green)
 - Hand off requirement document to implementation team
